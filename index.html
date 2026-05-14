@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>パネルクイズ</title>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+      user-select: none;
+    }
+
+    body {
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+      font-family: "Helvetica Neue", "Hiragino Sans", sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(255,255,255,0.15), transparent 20%),
+        radial-gradient(circle at bottom right, rgba(255,255,255,0.1), transparent 20%),
+        linear-gradient(135deg, #0b1b52 0%, #2d1674 100%);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: white;
+    }
+
+    .app {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      padding: 10px;
+      gap: 10px;
+    }
+
+    .top-bar {
+      height: 52px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 12px;
+      border-radius: 16px;
+      background: rgba(255,255,255,0.08);
+      border: 2px solid rgba(255,255,255,0.18);
+      backdrop-filter: blur(8px);
+      box-shadow: 0 4px 20px rgba(0,0,0,0.25);
+    }
+
+    .title {
+      font-size: 24px;
+      font-weight: 900;
+      letter-spacing: 1px;
+      text-shadow: 0 2px 6px rgba(0,0,0,0.4);
+    }
+
+    .counter {
+      font-size: 18px;
+      font-weight: bold;
+    }
+
+    .board {
+      flex: 1;
+      position: relative;
+      border-radius: 22px;
+      overflow: hidden;
+      border: 4px solid rgba(255,255,255,0.3);
+      box-shadow:
+        0 10px 30px rgba(0,0,0,0.35),
+        inset 0 0 20px rgba(255,255,255,0.08);
+    }
+
+    .quiz-image {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      z-index: 1;
+    }
+
+    .panel-grid {
+      position: absolute;
+      inset: 0;
+      z-index: 2;
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      grid-template-rows: repeat(4, 1fr);
+      gap: 8px;
+      padding: 8px;
+    }
+
+    .panel {
+      position: relative;
+      border-radius: 18px;
+      border: 3px solid rgba(255,255,255,0.9);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 6px;
+      font-size: clamp(16px, 2vw, 24px);
+      font-weight: 900;
+      color: white;
+      text-shadow: 0 2px 5px rgba(0,0,0,0.6);
+      cursor: pointer;
+      transition:
+        transform 0.18s ease,
+        opacity 0.45s ease,
+        filter 0.25s ease;
+      box-shadow:
+        inset 0 4px 10px rgba(255,255,255,0.25),
+        0 4px 10px rgba(0,0,0,0.3);
+    }
+
+    .panel:active {
+      transform: scale(0.95);
+    }
+
+    .panel.opened {
+      opacity: 0;
+      transform: scale(0.7);
+      pointer-events: none;
+      filter: brightness(1.8);
+    }
+
+    .panel::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 45%;
+      background: rgba(255,255,255,0.18);
+      border-radius: 16px 16px 40px 40px;
+      pointer-events: none;
+    }
+
+    .controls {
+      height: 68px;
+      display: flex;
+      gap: 10px;
+    }
+
+    button {
+      flex: 1;
+      border: none;
+      border-radius: 18px;
+      font-size: 22px;
+      font-weight: 900;
+      color: white;
+      cursor: pointer;
+      transition: transform 0.15s ease;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.35);
+    }
+
+    button:active {
+      transform: scale(0.96);
+    }
+
+    .reset-btn {
+      background: linear-gradient(180deg, #ff6b6b 0%, #d93f3f 100%);
+    }
+
+    .next-btn {
+      background: linear-gradient(180deg, #ffcc4d 0%, #ff9900 100%);
+    }
+
+    @media (orientation: portrait) {
+      body::before {
+        content: "iPhoneを横向きにしてください";
+        position: fixed;
+        inset: 0;
+        background: rgba(0,0,0,0.92);
+        color: white;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        font-size: 30px;
+        font-weight: bold;
+        z-index: 9999;
+        padding: 30px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="app">
+
+    <div class="top-bar">
+      <div class="title" id="questionTitle">第1問</div>
+      <div class="counter" id="counter">のこり 20枚</div>
+    </div>
+
+    <div class="board">
+      <img class="quiz-image" id="quizImage" src="https://picsum.photos/1200/800?random=1" />
+      <div class="panel-grid" id="panelGrid"></div>
+    </div>
+
+    <div class="controls">
+      <button class="reset-btn" id="resetBtn">リセット</button>
+      <button class="next-btn" id="nextBtn">次の問題</button>
+    </div>
+
+  </div>
+
+  <script>
+    const quizData = [
+      {
+        image: "images/q1.jpg",
+        panels: [
+          "変顔", "歌", "好き色", "犬", "ジャンプ",
+          "猫", "夢", "笑顔", "花", "海",
+          "虹", "星", "鬼", "朝", "食べ物",
+          "モデル", "拍手", "一回転", "ポーズ", "お姫様"
+        ]
+      },
+      {
+        image: "images/q2.jpg",
+        panels: [
+          "ピース", "趣味", "歌", "猫", "好き",
+          "ダンス", "拍手", "犬", "変顔", "夢",
+          "ジャンプ", "花", "モデル", "虹", "星",
+          "ポーズ", "海", "笑顔", "朝", "おやつ"
+        ]
+      },
+      {
+        image: "images/q3.jpg",
+        panels: [
+          "変身", "歌", "好き色", "犬", "ジャンプ",
+          "猫", "夢", "笑顔", "花", "海",
+          "虹", "星", "鬼", "朝", "食べ物",
+          "モデル", "拍手", "一回転", "ポーズ", "プリンセス"
+        ]
+      }
+    ];
+
+    const panelColors = [
+      "linear-gradient(180deg, #ff5f6d 0%, #d7263d 100%)",
+      "linear-gradient(180deg, #4facfe 0%, #0061ff 100%)",
+      "linear-gradient(180deg, #43e97b 0%, #1ea85b 100%)",
+      "linear-gradient(180deg, #fddb92 0%, #ff9f1c 100%)",
+      "linear-gradient(180deg, #c471ed 0%, #7b2cbf 100%)",
+      "linear-gradient(180deg, #ff9a9e 0%, #ff4d6d 100%)"
+    ];
+
+    const panelGrid = document.getElementById("panelGrid");
+    const quizImage = document.getElementById("quizImage");
+    const questionTitle = document.getElementById("questionTitle");
+    const counter = document.getElementById("counter");
+
+    const resetBtn = document.getElementById("resetBtn");
+    const nextBtn = document.getElementById("nextBtn");
+
+    let currentQuiz = 0;
+    let remainingPanels = 20;
+
+    function createPanels() {
+      panelGrid.innerHTML = "";
+
+      const data = quizData[currentQuiz];
+      remainingPanels = 20;
+      updateCounter();
+
+      questionTitle.textContent = `第${currentQuiz + 1}問`;
+      quizImage.src = data.image;
+
+      data.panels.forEach((text, index) => {
+        const panel = document.createElement("div");
+        panel.className = "panel";
+
+        const color = panelColors[index % panelColors.length];
+        panel.style.background = color;
+
+        panel.innerHTML = `${index + 1}<br>${text}`;
+
+        panel.addEventListener("click", () => {
+          if (panel.classList.contains("opened")) return;
+
+          panel.classList.add("opened");
+
+          remainingPanels--;
+          updateCounter();
+        });
+
+        panelGrid.appendChild(panel);
+      });
+    }
+
+    function updateCounter() {
+      counter.textContent = `のこり ${remainingPanels}枚`;
+    }
+
+    resetBtn.addEventListener("click", () => {
+      createPanels();
+    });
+
+    nextBtn.addEventListener("click", () => {
+      currentQuiz++;
+
+      if (currentQuiz >= quizData.length) {
+        currentQuiz = 0;
+      }
+
+      createPanels();
+    });
+
+    createPanels();
+  </script>
+
+</body>
+</html>
