@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <title>ƒpƒlƒ‹ƒNƒCƒY</title>
+  <title>ãƒ‘ãƒãƒ«ã‚¯ã‚¤ã‚º</title>
 
   <style>
     * {
@@ -172,7 +172,7 @@
 
     @media (orientation: portrait) {
       body::before {
-        content: "iPhone‚ğ‰¡Œü‚«‚É‚µ‚Ä‚­‚¾‚³‚¢";
+        content: "iPhoneã‚’æ¨ªå‘ãã«ã—ã¦ãã ã•ã„";
         position: fixed;
         inset: 0;
         background: rgba(0,0,0,0.92);
@@ -194,8 +194,8 @@
   <div class="app">
 
     <div class="top-bar">
-      <div class="title" id="questionTitle">‘æ1–â</div>
-      <div class="counter" id="counter">‚Ì‚±‚è 20–‡</div>
+      <div class="title" id="questionTitle">ç¬¬1å•</div>
+      <div class="counter" id="counter">ã®ã“ã‚Š 20æš</div>
     </div>
 
     <div class="board">
@@ -204,8 +204,8 @@
     </div>
 
     <div class="controls">
-      <button class="reset-btn" id="resetBtn">ƒŠƒZƒbƒg</button>
-      <button class="next-btn" id="nextBtn">Ÿ‚Ì–â‘è</button>
+      <button class="reset-btn" id="resetBtn">ãƒªã‚»ãƒƒãƒˆ</button>
+      <button class="next-btn" id="nextBtn">æ¬¡ã®å•é¡Œ</button>
     </div>
 
   </div>
@@ -215,28 +215,28 @@
       {
         image: "images/q1.jpg",
         panels: [
-          "•ÏŠç", "‰Ì", "D‚«F", "Œ¢", "ƒWƒƒƒ“ƒv",
-          "”L", "–²", "ÎŠç", "‰Ô", "ŠC",
-          "“ø", "¯", "‹S", "’©", "H‚×•¨",
-          "ƒ‚ƒfƒ‹", "”è", "ˆê‰ñ“]", "ƒ|[ƒY", "‚¨•P—l"
+          "å¤‰é¡”", "æ­Œ", "å¥½ãè‰²", "çŠ¬", "ã‚¸ãƒ£ãƒ³ãƒ—",
+          "çŒ«", "å¤¢", "ç¬‘é¡”", "èŠ±", "æµ·",
+          "è™¹", "æ˜Ÿ", "é¬¼", "æœ", "é£Ÿã¹ç‰©",
+          "ãƒ¢ãƒ‡ãƒ«", "æ‹æ‰‹", "ä¸€å›è»¢", "ãƒãƒ¼ã‚º", "ãŠå§«æ§˜"
         ]
       },
       {
         image: "images/q2.jpg",
         panels: [
-          "ƒs[ƒX", "ï–¡", "‰Ì", "”L", "D‚«",
-          "ƒ_ƒ“ƒX", "”è", "Œ¢", "•ÏŠç", "–²",
-          "ƒWƒƒƒ“ƒv", "‰Ô", "ƒ‚ƒfƒ‹", "“ø", "¯",
-          "ƒ|[ƒY", "ŠC", "ÎŠç", "’©", "‚¨‚â‚Â"
+          "ãƒ”ãƒ¼ã‚¹", "è¶£å‘³", "æ­Œ", "çŒ«", "å¥½ã",
+          "ãƒ€ãƒ³ã‚¹", "æ‹æ‰‹", "çŠ¬", "å¤‰é¡”", "å¤¢",
+          "ã‚¸ãƒ£ãƒ³ãƒ—", "èŠ±", "ãƒ¢ãƒ‡ãƒ«", "è™¹", "æ˜Ÿ",
+          "ãƒãƒ¼ã‚º", "æµ·", "ç¬‘é¡”", "æœ", "ãŠã‚„ã¤"
         ]
       },
       {
         image: "images/q3.jpg",
         panels: [
-          "•Ïg", "‰Ì", "D‚«F", "Œ¢", "ƒWƒƒƒ“ƒv",
-          "”L", "–²", "ÎŠç", "‰Ô", "ŠC",
-          "“ø", "¯", "‹S", "’©", "H‚×•¨",
-          "ƒ‚ƒfƒ‹", "”è", "ˆê‰ñ“]", "ƒ|[ƒY", "ƒvƒŠƒ“ƒZƒX"
+          "å¤‰èº«", "æ­Œ", "å¥½ãè‰²", "çŠ¬", "ã‚¸ãƒ£ãƒ³ãƒ—",
+          "çŒ«", "å¤¢", "ç¬‘é¡”", "èŠ±", "æµ·",
+          "è™¹", "æ˜Ÿ", "é¬¼", "æœ", "é£Ÿã¹ç‰©",
+          "ãƒ¢ãƒ‡ãƒ«", "æ‹æ‰‹", "ä¸€å›è»¢", "ãƒãƒ¼ã‚º", "ãƒ—ãƒªãƒ³ã‚»ã‚¹"
         ]
       }
     ];
@@ -268,7 +268,7 @@
       remainingPanels = 20;
       updateCounter();
 
-      questionTitle.textContent = `‘æ${currentQuiz + 1}–â`;
+      questionTitle.textContent = `ç¬¬${currentQuiz + 1}å•`;
       quizImage.src = data.image;
 
       data.panels.forEach((text, index) => {
@@ -294,7 +294,7 @@
     }
 
     function updateCounter() {
-      counter.textContent = `‚Ì‚±‚è ${remainingPanels}–‡`;
+      counter.textContent = `ã®ã“ã‚Š ${remainingPanels}æš`;
     }
 
     resetBtn.addEventListener("click", () => {
