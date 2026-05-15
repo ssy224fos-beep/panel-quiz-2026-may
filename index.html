@@ -139,6 +139,78 @@
       pointer-events: none;
     }
 
+    .correct-overlay {
+      position: absolute;
+      inset: 0;
+      z-index: 50;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      background: rgba(0, 0, 0, 0.45);
+      backdrop-filter: blur(4px);
+      animation: fadeIn 0.35s ease;
+    }
+
+    .correct-overlay.hidden {
+      display: none;
+    }
+
+    .correct-text {
+      font-size: clamp(54px, 8vw, 110px);
+      font-weight: 900;
+      color: #ffe14d;
+      text-shadow:
+        0 0 12px rgba(255,255,255,0.8),
+        0 0 30px rgba(255,225,77,0.9),
+        0 6px 12px rgba(0,0,0,0.5);
+      animation: popBounce 0.6s ease;
+    }
+
+    .correct-sub {
+      margin-top: 12px;
+      font-size: clamp(18px, 2vw, 28px);
+      font-weight: bold;
+      letter-spacing: 2px;
+      color: white;
+      opacity: 0.95;
+      animation: fadeSlide 0.8s ease;
+    }
+
+    @keyframes popBounce {
+      0% {
+        transform: scale(0.4);
+        opacity: 0;
+      }
+      60% {
+        transform: scale(1.15);
+      }
+      100% {
+        transform: scale(1);
+        opacity: 1;
+      }
+    }
+
+    @keyframes fadeSlide {
+      0% {
+        transform: translateY(20px);
+        opacity: 0;
+      }
+      100% {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+      to {
+        opacity: 1;
+      }
+    }
+
     .controls {
       height: 68px;
       display: flex;
@@ -202,9 +274,15 @@
       <div class="panel-grid" id="panelGrid"></div>
     </div>
 
+    <div id="correctOverlay" class="correct-overlay hidden">
+      <div class="correct-text">せいかい！</div>
+      <div class="correct-sub">🎉 CONGRATULATIONS 🎉</div>
+    </div>
+
     <div class="controls">
       <button class="reset-btn" id="resetBtn">リセット</button>
       <button class="next-btn" id="nextBtn">次の問題</button>
+      <button class="next-btn" id="correctBtn">正解！</button>
     </div>
 
   </div>
@@ -256,6 +334,8 @@
 
     const resetBtn = document.getElementById("resetBtn");
     const nextBtn = document.getElementById("nextBtn");
+    const correctBtn = document.getElementById("correctBtn");
+    const correctOverlay = document.getElementById("correctOverlay");
 
     let currentQuiz = 0;
     let remainingPanels = 20;
@@ -298,6 +378,23 @@
 
     resetBtn.addEventListener("click", () => {
       createPanels();
+    });
+
+    correctBtn.addEventListener("click", () => {
+      const panels = document.querySelectorAll(".panel");
+
+      panels.forEach((panel) => {
+        panel.classList.add("opened");
+      });
+
+      remainingPanels = 0;
+      updateCounter();
+
+      correctOverlay.classList.remove("hidden");
+
+      setTimeout(() => {
+        correctOverlay.classList.add("hidden");
+      }, 2500);
     });
 
     nextBtn.addEventListener("click", () => {
