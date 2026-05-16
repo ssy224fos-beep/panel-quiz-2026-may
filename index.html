@@ -289,10 +289,12 @@
 
   <script>
     const openSound = new Audio("https://actions.google.com/sounds/v1/cartoon/pop.ogg");
-    const correctSound = new Audio("https://actions.google.com/sounds/v1/crowds/large_crowd_applause.ogg");
+    const correctSound = new Audio("https://actions.google.com/sounds/v1/crowds/large_crowd_applause.mp3");
 
     openSound.volume = 0.45;
     correctSound.volume = 0.7;
+
+    correctSound.load();
     const quizData = [
       {
         image: "images/大石駅.jpg",
